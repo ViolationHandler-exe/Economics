@@ -1,4 +1,4 @@
-﻿//#define DEBUG
+//#define DEBUG
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using Oxide.Core.Libraries.Covalence;
 
 namespace Oxide.Plugins
 {
-    [Info("Economics", "Wulf", "3.9.1")]
+    [Info("Economics", "Wulf", "3.9.2")]
     [Description("Basic economics system and economy API")]
     public class Economics : CovalencePlugin
     {
@@ -403,6 +403,24 @@ namespace Oxide.Plugins
         }
 
         private bool Withdraw(ulong playerId, double amount) => Withdraw(playerId.ToString(), amount);
+        
+        #region Encrypted API
+#if RUST
+        private bool Deposit(BasePlayer.EncryptedValue<ulong> playerId, double amount) => Deposit((ulong)playerId, amount);
+        
+        private double Balance(BasePlayer.EncryptedValue<ulong> playerId) => Balance((ulong)playerId);
+        
+        private bool SetBalance(BasePlayer.EncryptedValue<ulong> playerId, double amount) => SetBalance((ulong)playerId, amount);
+        
+        private bool Transfer(BasePlayer.EncryptedValue<ulong> playerId, BasePlayer.EncryptedValue<ulong> targetId, double amount)
+        {
+            return Transfer((ulong)playerId, (ulong)targetId, amount);
+        }
+        
+        private bool Withdraw(BasePlayer.EncryptedValue<ulong> playerId, double amount) => Withdraw((ulong)playerId, amount);
+#endif
+        
+        #endregion Encrypted API
 
         #endregion API Methods
 
